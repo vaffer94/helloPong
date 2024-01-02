@@ -22,7 +22,6 @@ void printIntVal(int valToPrint)
 }
 
 bool initialize(void) {
-
     if(SDL_Init(SDL_INIT_VIDEO) != 0) {
         fprintf(stderr, "Failed to install SDL: %s\n",
         SDL_GetError());
@@ -33,12 +32,14 @@ bool initialize(void) {
     window = SDL_CreateWindow("HelloPong", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
 
     if (!window) {
+        fprintf(stderr, "Error creating the window!\n");
         return false;
     }
 
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
-    if (!window) {
+    if (!renderer) {
+        fprintf(stderr, "Error creating the renderer!\n");
         return false;
     }
 

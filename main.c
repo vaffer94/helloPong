@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 
+#include "common.h"
 #include "constants.h"
 #include "initFuncs.h"
 #include "updateFuncs.h"
@@ -26,34 +27,30 @@ int main(int argc, const char* argv[])
     srand((unsigned int)time(NULL));
     atexit(shoutdown);
 
-    if (!initialize()) {
+    // setup
+    if (!initialize())
+    {
         exit(1);
     }
 
-    bool quit = false;
-    SDL_Event event;
-
+    bool   quit     = false;
     Uint32 lastTick = SDL_GetTicks();
 
-    while (!quit){
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) {
-                quit = true;
-            }
-        }
+    while (!quit)
+    {
+        quit = processInput();
 
-    Uint32 curTick = SDL_GetTicks();
-    Uint32 diff = curTick - lastTick;
-    float elapsed = diff / 1000.0f;
+        Uint32 curTick = SDL_GetTicks();
+        Uint32 diff    = curTick - lastTick;
+        float  elapsed = diff / 1000.0f;
 
-    update(elapsed);
+        // update and render
+        update(elapsed);
 
-    lastTick = curTick;
-
+        lastTick = curTick;
     }
 
     SDL_Quit();
 
     return 0;
 }
-

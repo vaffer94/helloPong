@@ -45,6 +45,7 @@ void update(float elapsed) {
     updatePlayers(elapsed);
     renderPlayers();
 
+    // swap: back buffer that we populated become the front buffer
     SDL_RenderPresent(renderer);
 }
 

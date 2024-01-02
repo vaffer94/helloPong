@@ -43,8 +43,10 @@ void renderBall(const Ball* ball);
 void updateBall(Ball* ball, float elapsed);
 
 Player makePlayer(void);
-void updatePlayers(float elapsed);
-void renderPlayers(void);
+void   updatePlayers(float elapsed);
+void   renderPlayers(void);
+
+void updateScore(int player, int points);
 
 //****************************************************************************
 
@@ -206,12 +208,14 @@ void updateBall(Ball* ball, float elapsed) {
 
     if (ball->x < 0 + BALL_SIZE)
     {
-        ball->xSpeed = fabs(ball->xSpeed);
+        /// ball->xSpeed = fabs(ball->xSpeed);
+        updateScore(2, 100);
     }
 
     if (ball->x > WIDTH - BALL_SIZE)
     {
-        ball->xSpeed = -fabs(ball->xSpeed);
+        // ball->xSpeed = -fabs(ball->xSpeed);
+        updateScore(1, 100);
     }
 
     if (ball->y < 0 + BALL_SIZE)
@@ -225,9 +229,11 @@ void updateBall(Ball* ball, float elapsed) {
     }
 }
 
-Player makePlayer(void) {
+Player makePlayer(void)
+{
     Player player = {
         .yPosition = HEIGHT / 2,
+        .score     = 0,
     };
 
     return player;
@@ -239,6 +245,79 @@ void updatePlayers(float elapsed) {
     if (keyboardState[SDL_SCANCODE_SPACE])
     {
         served = true;
+    }
+
+    if (keyboardState[SDL_SCANCODE_W])
+    {
+        player1.yPosition -= PLAYER_MOVE_SPEED * elapsed;
+    }
+
+    if (keyboardState[SDL_SCANCODE_S])
+    {
+        player1.yPosition += PLAYER_MOVE_SPEED * elapsed;
+    }
+
+    if (keyboardState[SDL_SCANCODE_UP])
+    {
+        player2.yPosition -= PLAYER_MOVE_SPEED * elapsed;
+    }
+
+    if (keyboardState[SDL_SCANCODE_DOWN])
+    {
+        player2.yPosition += PLAYER_MOVE_SPEED * elapsed;
+    }
+
+    if (player1.yPosition < PLAYER_HEIGHT / 2)
+    {
+        player1.yPosition = PLAYER_HEIGHT / 2;
+    }
+
+    if (player1.yPosition > HEIGHT - PLAYER_HEIGHT / 2)
+    {
+        player1.yPosition = HEIGHT - PLAYER_HEIGHT / 2;
+    }
+
+    if (player2.yPosition < PLAYER_HEIGHT / 2)
+    {
+        player2.yPosition = PLAYER_HEIGHT / 2;
+    }
+
+    if (player2.yPosition > HEIGHT - PLAYER_HEIGHT / 2)
+    {
+        player2.yPosition = HEIGHT - PLAYER_HEIGHT / 2;
+    }
+
+    SDL_Rect ballRect = {
+        .x = ball.x - ball.size / 2,
+        .y = ball.y - ball.size / 2,
+        .w = ball.size,
+        .h = ball.size,
+    };
+
+    SDL_Rect player1Rect = {
+        .x = PLAYER_MARGIN,
+        .y = (int)(player1.yPosition) - PLAYER_HEIGHT / 2,
+        .w = PLAYER_WIDTH,
+        .h = PLAYER_HEIGHT,
+    };
+
+    if (SDL_HasIntersection(&ballRect, &player1Rect))
+    {
+        // the ball goes to the right
+        ball.xSpeed = fabs(ball.xSpeed);
+    }
+
+    SDL_Rect player2Rect = {
+        .x = WIDTH - PLAYER_WIDTH - PLAYER_MARGIN,
+        .y = (int)(player2.yPosition) - PLAYER_HEIGHT / 2,
+        .w = PLAYER_WIDTH,
+        .h = PLAYER_HEIGHT,
+    };
+
+    if (SDL_HasIntersection(&ballRect, &player2Rect))
+    {
+        // the ball goes to the left
+        ball.xSpeed = - fabs(ball.xSpeed);
     }
 }
 
@@ -253,7 +332,7 @@ void renderPlayers(void) {
     };
     SDL_RenderFillRect(renderer, &player1Rect);
 
-    // render player 2 (left, red)
+    // render player 2 (right, blue)
     SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
     SDL_Rect player2Rect = {
         .x = WIDTH - PLAYER_WIDTH - PLAYER_MARGIN,
@@ -264,3 +343,33 @@ void renderPlayers(void) {
     SDL_RenderFillRect(renderer, &player2Rect);
 }
 
+void updateScore(int player, int points)
+{
+    served = false;
+
+    if (player == 1)
+    {
+        player1.score += points;
+    }
+
+    if (player == 2)
+    {
+        player2.score += points;
+    }
+
+    char buf[30];
+    int maxLen = sizeof(buf);
+    char* ttl = "Player1: %d | Player2: %d";
+    int len = snprintf(buf, maxLen, ttl, player1.score, player2.score);
+    SDL_SetWindowTitle(window, buf);
+
+    // TODOVF questa roba non scrive veramente il punteggio
+    // char *ttl = "Player1: %d | Player2: %d";
+    //  int len = snprintf(NULL, 0, ttl, player1.score, player2.score);
+    //  char buf[len + 1];
+
+    //  printf("len: %d \n", len);
+
+    // snprintf(buf, len + 1, ttl, player1.score, player2.score);
+    // SDL_SetWindowTitle(window, buf);
+}

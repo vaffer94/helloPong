@@ -7,4 +7,6 @@
 
 bool processInput(void);
 
+void timeUpdate(Uint32* lastFrameTime, float* deltaTime);
+
 #endif // COMMON_H_

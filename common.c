@@ -1,6 +1,34 @@
 #include "common.h"
 #include "constants.h"
 
+bool printLogo(void)
+{
+    FILE* fptr;
+
+    char filename[20] = "./vaffer94_logo.txt";
+
+    // Open file
+    fptr = fopen(filename, "r");
+    if (fptr == NULL)
+    {
+        printf("Cannot open file \n");
+        return false;
+    }
+
+    printf(ANSI_COLOR_RED"\nARCADE PONG"ANSI_COLOR_RESET"\n");
+
+    // Read contents from file
+    char c = fgetc(fptr);
+    while (c != EOF)
+    {
+        printf("%c", c);
+        c = fgetc(fptr);
+    }
+
+    fclose(fptr);
+    return true;
+}
+
 bool processInput(void)
 {
     bool      isGameExit = false;

@@ -5,6 +5,7 @@
 #include "initFuncs.h"
 
 extern SDL_Window*   window;
+extern SDL_Surface*  gScreenSurface;
 extern SDL_Renderer* renderer;
 extern Ball          ball;
 extern bool          served;
@@ -35,13 +36,19 @@ bool initialize(void) {
         fprintf(stderr, "Error creating the window!\n");
         return false;
     }
-
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-
-    if (!renderer) {
-        fprintf(stderr, "Error creating the renderer!\n");
-        return false;
+    else
+    {
+        //Get window surface
+        gScreenSurface = SDL_GetWindowSurface( window );
     }
+
+    // this fails if there is also the screen surface
+    // renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+    // if (!renderer) {
+    //     fprintf(stderr, "Error creating the renderer!\n");
+    //     return false;
+    // }
 
     ball = makeBall(BALL_SIZE);
     player1 = makePlayer();

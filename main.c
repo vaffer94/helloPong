@@ -7,10 +7,13 @@
 #include "endFuncs.h"
 #include "initFuncs.h"
 #include "updateFuncs.h"
+#include "loadImage.h"
 
-SDL_Window*   window   = NULL;
-SDL_Renderer* renderer = NULL;
-bool          served   = false;
+SDL_Window*   window         = NULL; // The window we'll be rendering to
+SDL_Surface*  gScreenSurface = NULL; // The surface contained by the window
+SDL_Surface*  gHelloWorld    = NULL; // The image we will load and show on the screen
+SDL_Renderer* renderer       = NULL;
+bool          served         = false;
 Ball          ball;
 Player        player1;
 Player        player2;
@@ -33,27 +36,53 @@ int main(int argc, const char* argv[])
         exit(1);
     }
 
-    // Uint32   lastTick      = SDL_GetTicks();
-    bool     quit          = false;
-    Uint32 lastFrameTime = 0;
-    float deltaTime     = 0;
-
-    while (!quit)
+    // Load media
+    if (!loadMedia())
     {
-        // catch user input
-        quit = processInput();
-
-        // logic to keep a fixed time step
-        timeUpdate(&lastFrameTime, &deltaTime);
-        // Uint32 curTick = SDL_GetTicks();
-        // Uint32 diff    = curTick - lastTick;
-        // float  elapsed = diff / 1000.0f;
-
-        // update and render
-        update(deltaTime);
-
-        // lastTick = curTick;
+        printf("Failed to load media!\n");
     }
+    else
+    {
+        // Apply the image
+        SDL_BlitSurface(gHelloWorld, NULL, gScreenSurface, NULL);
+
+        // Update the surface
+        SDL_UpdateWindowSurface(window);
+
+        // Hack to get window to stay up
+        SDL_Event e;
+        bool      quitBis = false;
+        while (quitBis == false)
+        {
+            while (SDL_PollEvent(&e))
+            {
+                if (e.type == SDL_QUIT)
+                    quitBis = true;
+            }
+        }
+    }
+
+    // // Uint32   lastTick      = SDL_GetTicks();
+    // bool   quit          = false;
+    // Uint32 lastFrameTime = 0;
+    // float  deltaTime     = 0;
+
+    // while (!quit)
+    // {
+    //     // catch user input
+    //     quit = processInput();
+
+    //     // logic to keep a fixed time step
+    //     timeUpdate(&lastFrameTime, &deltaTime);
+    //     // Uint32 curTick = SDL_GetTicks();
+    //     // Uint32 diff    = curTick - lastTick;
+    //     // float  elapsed = diff / 1000.0f;
+
+    //     // update and render
+    //     update(deltaTime);
+
+    //     // lastTick = curTick;
+    // }
 
     SDL_Quit();
 

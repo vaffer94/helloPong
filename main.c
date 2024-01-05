@@ -19,10 +19,7 @@ Player        player2;
 
 int main(int argc, const char* argv[])
 {
-    printf("\n\nHello world!\n");
-    printf("\U0001f984 - 👾\n\n");
-
-    printIntVal(3);
+    printLogo();
 
     srand((unsigned int)time(NULL));
     atexit(shoutdown);
@@ -33,10 +30,9 @@ int main(int argc, const char* argv[])
         exit(1);
     }
 
-    // Uint32   lastTick      = SDL_GetTicks();
-    bool     quit          = false;
+    bool   quit          = false;
     Uint32 lastFrameTime = 0;
-    float deltaTime     = 0;
+    float  deltaTime     = 0;
 
     while (!quit)
     {
@@ -45,17 +41,10 @@ int main(int argc, const char* argv[])
 
         // logic to keep a fixed time step
         timeUpdate(&lastFrameTime, &deltaTime);
-        // Uint32 curTick = SDL_GetTicks();
-        // Uint32 diff    = curTick - lastTick;
-        // float  elapsed = diff / 1000.0f;
 
         // update and render
         update(deltaTime);
-
-        // lastTick = curTick;
     }
-
-    SDL_Quit();
 
     return 0;
 }

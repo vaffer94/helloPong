@@ -43,7 +43,7 @@ void update(float elapsed) {
     renderBall(&ball);
 
     updatePlayers(elapsed);
-    renderPlayers();
+    renderPlayers(renderer, player1, player2);
 
     // swap: back buffer that we populated become the front buffer
     SDL_RenderPresent(renderer);
@@ -183,7 +183,8 @@ void updatePlayers(float elapsed) {
     }
 }
 
-void renderPlayers(void) {
+void renderPlayers(SDL_Renderer* renderer, Player player1, Player player2)
+{
     // render player 1 (left, red)
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     SDL_Rect player1Rect = {

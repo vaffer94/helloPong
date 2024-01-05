@@ -15,12 +15,6 @@ extern Player        player2;
  ****************** PUBLIC FUNCTIONS ******************
 *******************************************************/
 
-void printIntVal(int valToPrint)
-{
-    printf("Val: %d \n", valToPrint);
-    printf("WIDTH: %d \n", WIDTH);
-}
-
 bool initialize(void) {
     if(SDL_Init(SDL_INIT_VIDEO) != 0) {
         fprintf(stderr, "Failed to install SDL: %s\n",

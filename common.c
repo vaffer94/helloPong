@@ -6,21 +6,39 @@ bool processInput(void)
     bool      isGameExit = false;
     SDL_Event event;
 
-    SDL_PollEvent(&event);
-
-    switch (event.type)
+    // Handle events on queue
+    while(SDL_PollEvent(&event) != 0 )
     {
-    case SDL_QUIT:
-        isGameExit = true;
-        break;
-    case SDL_KEYDOWN:
-        if (event.key.keysym.sym == SDLK_ESCAPE)
+        switch (event.type)
+        {
+        case SDL_QUIT:
             isGameExit = true;
-        break;
+            break;
+        case SDL_KEYDOWN:
+            if (event.key.keysym.sym == SDLK_ESCAPE)
+                isGameExit = true;
+            break;
 
-    default:
-        break;
+        default:
+            break;
+        }
     }
+
+    // SDL_PollEvent(&event);
+
+    // switch (event.type)
+    // {
+    // case SDL_QUIT:
+    //     isGameExit = true;
+    //     break;
+    // case SDL_KEYDOWN:
+    //     if (event.key.keysym.sym == SDLK_ESCAPE)
+    //         isGameExit = true;
+    //     break;
+
+    // default:
+    //     break;
+    // }
 
     return isGameExit;
 }

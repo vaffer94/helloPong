@@ -37,7 +37,8 @@ int main(int argc, const char* argv[])
     }
 
     // Load media
-    if (!loadMedia())
+    char splashImage[PATH_MAX_LIMIT] = "hello_world.bmp";
+    if (!loadMedia(splashImage))
     {
         printf("Failed to load media!\n");
     }
@@ -48,41 +49,29 @@ int main(int argc, const char* argv[])
 
         // Update the surface
         SDL_UpdateWindowSurface(window);
-
-        // Hack to get window to stay up
-        SDL_Event e;
-        bool      quitBis = false;
-        while (quitBis == false)
-        {
-            while (SDL_PollEvent(&e))
-            {
-                if (e.type == SDL_QUIT)
-                    quitBis = true;
-            }
-        }
     }
 
-    // // Uint32   lastTick      = SDL_GetTicks();
-    // bool   quit          = false;
-    // Uint32 lastFrameTime = 0;
-    // float  deltaTime     = 0;
+    // Uint32   lastTick      = SDL_GetTicks();
+    bool   quit          = false;
+    Uint32 lastFrameTime = 0;
+    float  deltaTime     = 0;
 
-    // while (!quit)
-    // {
-    //     // catch user input
-    //     quit = processInput();
+    while (!quit)
+    {
+        // catch user input
+        quit = processInput();
 
-    //     // logic to keep a fixed time step
-    //     timeUpdate(&lastFrameTime, &deltaTime);
-    //     // Uint32 curTick = SDL_GetTicks();
-    //     // Uint32 diff    = curTick - lastTick;
-    //     // float  elapsed = diff / 1000.0f;
+        // // logic to keep a fixed time step
+        // timeUpdate(&lastFrameTime, &deltaTime);
+        // // Uint32 curTick = SDL_GetTicks();
+        // // Uint32 diff    = curTick - lastTick;
+        // // float  elapsed = diff / 1000.0f;
 
-    //     // update and render
-    //     update(deltaTime);
+        // // update and render
+        // update(deltaTime);
 
-    //     // lastTick = curTick;
-    // }
+        // // lastTick = curTick;
+    }
 
     SDL_Quit();
 
